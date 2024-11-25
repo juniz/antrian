@@ -4,12 +4,15 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
+use Livewire\Attributes\On;
 
 new class extends Component {
     public $kd_dokter;
     public $kd_poli;
-    public $antrianPanggil;
+    // public $antrianPanggil;
     public $daftarAntrian;
+    // protected $listeners = ['setStatusAntrian' => 'setStatusAntrian'];
+
     public function mount($kd_dokter, $kd_poli)
     {
         $this->kd_dokter = Crypt::decryptString($kd_dokter);
@@ -59,10 +62,24 @@ new class extends Component {
         $data = DB::table('antripoli')
             ->where('kd_dokter', $this->kd_dokter)
             ->where('kd_poli', $this->kd_poli)
-            ->where('status', '0')
+            // ->where('status', '0')
             ->first();
             // dd($data);
-        $this->antrianPanggil = $data;
+        return $data;
+    }
+
+
+    #[On('setStatusAntrian')]
+    public function setStatusAntrian()
+    {
+        $this->dispatch('playSound');
+        DB::table('antripoli')
+            ->where('kd_dokter', $this->kd_dokter)
+            ->where('kd_poli', $this->kd_poli)
+            ->update([
+                'status' => '0'
+            ]);
+        // dd('play sound');
     }
 
     public function getNoAntrian($no_rawat)
@@ -120,15 +137,19 @@ new class extends Component {
             'daftarAntrianPoli' => $this->getListAntrian(),
             'dokter' => $this->getDokter(),
             'poli' => $this->getPoli(),
+            'antrianPanggil' => $this->getPanggilan(),
         ];
     }
 }; ?>
 
-<div wire:poll.1000ms class="min-h-screen">
+<div wire:poll='$refresh' class="min-h-screen">
     <h1 class="text-5xl text-center font-bold my-2">{{ $dokter }}</h1>
     <h2 class="text-3xl text-center font-bold my-2">{{ $poli }}</h2>
     <h3 class="text-center font-bold text-xl mb-4">{{ now() }}</h3>
     @if($antrianPanggil)
+    @if($antrianPanggil->status == '1')
+        {{ $this->setStatusAntrian() }}
+    @endif
     <div class="grid grid-cols-4 gap-4 mb-4">
         <div class="col-span-1">
             <x-card class="text-center">
@@ -186,3 +207,13 @@ new class extends Component {
         </div>
     </div>
 </div>
+
+@script
+<script>
+    $wire.on('playSound', () => {
+        const audio = new Audio('bell.wav');
+        audio.play();
+        alert('Panggilan Antrian');
+    });
+</script>
+@endscript

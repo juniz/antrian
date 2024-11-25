@@ -213,7 +213,7 @@ new class extends Component {
     $wire.on('playSound', () => {
         const audio = new Audio('bell.wav');
         audio.play();
-        alert('Panggilan Antrian');
+        // alert('Panggilan Antrian');
     });
 </script>
 @endscript

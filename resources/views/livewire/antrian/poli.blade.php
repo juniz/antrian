@@ -154,7 +154,7 @@ new class extends Component {
         <div class="col-span-1">
             <x-card class="text-center">
                 <h2 class="text-2xl font-bold">Panggilan Antrian</h2>
-                <h3 class="text-7xl font-bold my-10">{{ $this->getNoAntrian($antrianPanggil->no_rawat) }}</h3>
+                <h3 class="text-5xl font-bold mt-4">{{ $this->getNoAntrian($antrianPanggil->no_rawat) }}</h3>
             </x-card>
         </div>
         <div class="col-span-3">
@@ -176,11 +176,11 @@ new class extends Component {
         <div class="flex flex-col gap-4 col-span-1">
             <x-card class="text-center text-white bg-green-500">
                 <h2 class="text-2xl font-bold">Terlayani</h2>
-                <h3 class="text-7xl font-bold my-10">{{ $jmlSudahDilayani }}</h3>
+                <h3 class="text-5xl font-bold my-4">{{ $jmlSudahDilayani }}</h3>
             </x-card>
             <x-card class="text-center text-white bg-red-500">
                 <h2 class="text-2xl font-bold">Total Antrian</h2>
-                <h3 class="text-7xl font-bold my-10">{{ $jmlBelumDilayani }}</h3>
+                <h3 class="text-5xl font-bold my-4">{{ $jmlBelumDilayani }}</h3>
             </x-card>
         </div>
         <div class="flex flex-col col-span-3">
